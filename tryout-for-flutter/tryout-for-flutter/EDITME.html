@@ -1,0 +1,755 @@
+<!-- open hyperlinks in a new tab , styling code -->
+<!-- center and bold characters - line 2 -->
+<div class="note">
+  <em>Update note</em>: <b>Nishant Srivastava</b> updated this tutorial for <b>Flutter 1.7</b> and <b>Dart
+      2.4</b>. The original tutorial was written by <b>Joe Howard</b>.
+</div>
+
+<!-- line break - line 4 -->
+<br>Since the time that the iOS and Android platforms exploded onto the scene a decade ago, <em>cross-platform
+  development</em> has been a goal across the mobile development world. The ability to write one app for both iOS and
+Android can save significant time and effort for your company and team.
+
+There have been various tools released for cross-platform development over the years, including web-based tools such as
+<em><a href="https://phonegap.com/" target="_blank">PhoneGap</a></em> from Adobe, powerful frameworks such as <em><a
+    href="https://www.xamarin.com/" target="_blank">Xamarin</a></em> from Microsoft, and newer tools such as <em><a
+    href="https://facebook.github.io/react-native/" target="_blank">React Native</a></em> from Facebook. Each tool-set
+has pros and cons and they have met with varying degrees of success in the mobile industry.
+
+A more recent framework to enter the cross-platform arena is <em><a href="https://flutter.dev/"
+    target="_blank">Flutter</a></em> from Google. Flutter features fast development cycles, fast UI rendering, unique UI
+design, and native app performance on both platforms.
+
+<h2>Introduction to Flutter</h2>
+As you'll see in this tutorial, the Flutter framework is heavily built around the idea of <em>widgets</em>. In Flutter,
+widgets are not used just for the views of your app, but also for entire screens and even for the app itself.
+
+In this tutorial, you'll build a flutter app that queries the <em><a
+    href="https://developer.github.com/v3/teams/members/"target="_blank">GitHub API</a></em> for team members in a GitHub organization
+and displays the team member information in a scroll-able list:
+<center>
+  <br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/finalapp.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/finalapp-571x500.png" alt="Final apps" width="571"
+    height="500" class="aligncenter size-large wp-image-188637" /></a>
+</center>
+<br>
+<!-- Added Android feature -->
+You can develop the app while using the Android SDK for Android or XCode for iOS or both!
+
+In building out the app, you'll first learn the following about Flutter:
+
+<ul>
+  <li>Setting up your development environment</li>
+  <li>Creating a new project</li>
+  <li>Importing files and packages</li>
+  <li>Using widgets and creating your own</li>
+  <li>Making network calls</li>
+  <li>Showing items in a list</li>
+  <li>Customizing your app with Themes</li>
+</ul>
+<!-- Text -->
+You'll also get to know the Dart programming language as you follow along the way! :]
+
+<h2>Let's Get Going</h2>
+Flutter development can be done on Windows or macOS or Linux. While you can use any editor with the Flutter tool-chain, there are IDE plugins for <em><a href="https://www.jetbrains.com/idea/"target="_blank">IntelliJ IDEA</a></em>, <em><a
+    href="https://developer.android.com/studio/index.html"target="_blank">Android Studio,</a></em> and <em><a
+    href="https://code.visualstudio.com/"target="_blank">Visual Studio Code</a></em> that can ease the development cycle. We'll use the VS
+Code for this tutorial.
+
+<h2>Setting up your development environment</h2>
+Instructions for setting up your development machine with the Flutter framework can be found <a
+  href="https://flutter.dev/docs/get-started/install" target="_blank">here</a>. The basic steps vary by platform, but
+for the most part, are:
+
+<ol>
+  <li>Download the installation bundle for your development machine's operating system to get the latest stable release
+    of the Flutter SDK</li>
+  <li>Extract the installation bundle in the desired location</li>
+  <li>Add the flutter tool to your path</li>
+  <li>Install missing dependencies</li>
+  <li>Set up your IDE with a Flutter plugin/extension</li>
+  <!-- text -->
+  <li>Run <em>flutter doctor</em> command in the terminal to your environment and displays a report of the status of your Flutter installation</li>
+  <li>Test drive an app</li>
+</ol>
+
+The instructions provided on the Flutter webpage are well documented and allow you to easily understand and set up a development
+environment on the platform of your choice. The remainder of this tutorial assumes you've set up the VS Code for Flutter
+development, and that you've addressed any issues found by <code>flutter doctor</code>.
+
+Now you should also be able to follow along pretty well if you're using Android Studio. You'll also need to be running
+either the iOS Simulator, an Android emulator, or have a provisioned iOS device or an Android device set up for
+development.
+
+<div class="note">
+  <p><em>Note</em>: For building and testing on the iOS Simulator or an iOS device, you'll need to be using macOS with
+    XCode installed.</p>
+</div>
+
+<h2>Creating a new project</h2>
+In VS Code with the Flutter extension installed, <br>open the command palette by choosing <em>View ► Command Palette</em>
+or hitting <em>Cmd-Shift-P</em> on macOS or <em>Ctrl-Shift-P</em> on Linux or Windows. <br>Enter <em>Flutter: New Project</em> into
+the palette and hit return.
+<center>
+  <br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/newproject.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/newproject-650x137.png" alt="New project" width="650"
+    height="137" class="aligncenter size-large wp-image-188639" /></a>
+  </center>
+  <br>
+Enter the name of your project and hit return. For this tutorial, we will go with <em>ghflutter</em>. <br>Select a folder to store the project in, and then wait
+for Flutter to set up the project in VS Code. <br>When the project is ready, the file <em>main.dart</em> will be opened in
+your editor.
+<br>
+<center>
+  <br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/projectready.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/projectready-650x406.png" alt="Project ready"
+    width="650" height="406" class="aligncenter size-large wp-image-188640" /></a>
+  </center>
+    <br>
+In VS Code, you see a panel on the left-hand side that shows your project structure. There are folders for iOS and
+Android, as well as a <em>lib</em> folder that contains <em>main.dart</em> and will have code that applies to both
+platforms. You'll be working in the lib folder only in this tutorial.
+
+Replace the code in main.dart with the following:
+
+<pre lang="dart">
+import 'package:flutter/material.dart';
+
+void main() => runApp(GHFlutterApp());
+
+class GHFlutterApp extends StatelessWidget {
+  @override
+  Widget buildWidget(BuildContext context) {
+    return MaterialApp(
+      title: 'GHFlutter', //Displays text when the app is minimized
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('GHFlutter'), //Displays text at AppBar
+        ),
+        body: Center(
+          child: Text('GHFlutter'), //Displays text in the body
+        ),
+      ),
+    );
+  }
+}
+</pre>
+
+
+The <code>main()</code> function near the top uses the <code>=></code> operator for a single line function to run the
+app. You have one class for the app named <code>GHFlutterApp</code>.
+
+You see here that your app itself is a <code>StatelessWidget</code>. Most entities in a Flutter app are
+<em>widgets</em>, either stateless or stateful. You override the widget <code>build()</code> method to create your app
+widget. You're using the <em>MaterialApp</em> widget that provides a number of components needed for apps following
+Material Design.
+
+For this getting started tutorial, remove the test file widget_test.dart in the <code>test</code> folder from the
+project by right-clicking, selecting the Delete option, and then confirming the deletion.
+<br>
+<center>
+  <br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_deletetest.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_deletetest-486x500.png" alt="" width="486"
+    height="500" class="aligncenter size-large wp-image-229688" /></a>
+  </center>
+  <br>
+If you're on macOS, startup the iOS simulator. You can also use the Android Simulator on macOS, Linux, or Windows. If both
+the iOS Simulator and an Android emulator are running, you can switch between them using the menu in the bottom right of
+the VS Code window:
+<br>
+<center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/switchdevices.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/switchdevices-650x406.png" alt="Switch devices"
+    width="650" height="406" class="aligncenter size-large wp-image-188641" /></a>
+  </center>
+  <br>
+To build and run the project, we will need to setup a launch configuration first.
+
+Switch to Debug View, by clicking on the crossed bug icon on the left side panel.
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_debugpanel.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_debugpanel-607x500.png" alt="" width="607"
+    height="500" class="aligncenter size-large wp-image-229689" /></a>
+  </center>
+  <br>
+You will notice there is no configuration defined as of now. Click on "No Configuration" to get the dropdown and select
+"Add Configuration".
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_addconfig.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_addconfig-650x108.png" alt="" width="650"
+    height="108" class="aligncenter size-large wp-image-229690" /></a>
+  </center>
+  <br>
+VS Code will create a launch.json file with the details as below:
+<br>
+<center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_launchjson.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2019/07/ghflutter_launchjson-650x199.png" alt="" width="650"
+    height="199" class="aligncenter size-large wp-image-229691" /></a>
+  </center>
+  <br>
+<div class="note">
+  <p><em>Note</em>: This file is auto-generated for you when you choose the <em>Add Configuration</em> item. You shouldn't
+    need to modify it for this tutorial.</p>
+</div>
+
+You are all set up now, build and run the project by hitting <em>F5</em> or choosing Debug ► Start Debugging or hitting
+the green play icon. You'll see the <em>Debug Console</em> open and, if running on iOS, you'll see XCode being used to
+build the project. If running on Android, you'll see Gradle being invoked to do the build.
+
+You can stop the running app by clicking the stop button on the right of the toolbar at the top of the VS Code window:
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/toolbar.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/toolbar-650x156.png" alt="The VS Code toolbar"
+    width="650" height="156" class="aligncenter size-large wp-image-188644" /></a>
+  </center>
+  <br>
+You can get back to the project view by clicking the icon in the upper left of the VS Code or choosing <em>View ►
+  Explorer</em>.
+
+<h2>Hot Reload</h2>
+One of the best aspects of Flutter development is being able to <em>hot reload</em> your app as you make changes. This
+is similar to something like Android Studio's <em>Instant Run/Apply Changes</em>.
+
+Build and run the app so that its running on the Simulator or an emulator:
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/firstandroidrun-1.png"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/firstandroidrun-1-281x500.png" alt="Before hot reload"
+    width="281" height="500" class="aligncenter size-large wp-image-188645" /></a>
+  </center>
+  <br>
+Now, without stopping the running app, change the app bar string to something else:
+
+<pre lang="dart">
+appBar: AppBar(
+  title: Text('GHFlutter App'), //Displays text at AppBar
+),
+</pre>
+
+
+Now click the hot reload button on the toolbar or simply save the <em>main.dart</em> file:
+<br>
+<center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/hotreloadbutton.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/hotreloadbutton-650x156.png" alt="Hot reload button"
+    width="650" height="156" class="aligncenter size-large wp-image-188646" /></a>
+  </center>
+  <br>
+Within a second or two you should see the change reflected in the running app:
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/hotreload.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/hotreload-281x500.png" alt="After hot reload"
+    width="281" height="500" class="aligncenter size-large wp-image-188647" /></a>
+  </center>
+  <br>
+The hot reload feature may not always work and the <a
+  href="https://flutter.dev/docs/development/tools/hot-reload"target="_blank">official docs</a> do a really nice job of explaining the
+cases where it does not work, but overall it's a great time saver when you're building out your UI.
+
+<h2>Importing a File</h2>
+Rather than keep all your Dart code in the single <i>main.dart</i> file, you'll want to be able to import code from
+other classes you create. You'll see an example now for importing strings, which will help when you need to localize
+your user-facing strings.
+
+Create a file named strings.dart in the lib folder by right-clicking on <em>lib</em> and choosing <em>New File</em>:
+<br>
+<center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/newfile.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/newfile-371x500.png" alt="Creating a new file"
+    width="371" height="500" class="aligncenter size-large wp-image-188648" /></a>
+  </center>
+  <br>
+Add the following class to the new file:
+
+<pre lang="dart">
+class Strings {
+  static String appTitle = "GHFlutter"; //Initializing a variable with a String for future use
+}
+</pre>
+
+
+Add the following import to the top of <em>main.dart</em>
+
+<pre lang="dart">
+import 'strings.dart';
+</pre>
+
+
+Change your widget to use the new strings class so that the <code>GHFlutterApp</code> class looks as follows:
+
+<pre lang="dart">
+class GHFlutterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: Strings.appTitle, //Displays text when the app is minimized from a variable of Strings class
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(Strings.appTitle), //Displays text at AppBar from a variable of Strings class
+        ),
+        body: Center(
+          child: Text(Strings.appTitle), //Displays text in the body from a variable of Strings class
+        ),
+      ),
+    );
+  }
+}
+</pre>
+
+Build and run the app by hitting F11, and you should see no change, but you're now using strings from the strings file.
+
+<h2>Widgets</h2>
+Almost every element of your Flutter app is a widget. Widgets are designed to be <em>immutable</em>, since using
+immutable widgets helps keep the app UI lightweight.
+
+There are two fundamental types of widgets you will use:
+
+<ul>
+  <li><em>Stateless</em>: widgets that depend only upon their own configuration info, such as a static image in an image
+    view.</li>
+  <li><em>Stateful</em>: widgets that need to maintain dynamic information and do so by interacting with a
+    <em>State</em> object.</li>
+</ul>
+
+Both stateless and stateful widgets redraw in Flutter apps on every frame, the difference being that the stateful
+widgets delegate their configuration to a <em>State</em> object.
+
+To get started with making your own widgets, create a new class at the bottom of <em>main.dart</em>:
+
+<pre lang="dart">
+class GHFlutter extends StatefulWidget {
+  @override
+  createState() => GHFlutterState(); //Framework can call this method multiple times over the lifetime of a StatefulWidget
+}
+</pre>
+
+You've made a <code>StatefulWidget</code> subclass and you're overriding the <code>createState()</code> method to create
+its state object. Now add a <code>GHFlutterState</code> class above <code>GHFlutter</code>:
+
+<pre lang="dart">
+class GHFlutterState extends State<GHFlutter> { //Stores the mutable data that can change over the lifetime of the widget
+}
+</pre>
+
+<code>GHFlutterState</code> extends <code>StatefulWidget</code> with a parameter of <code>GHFlutter</code>.
+
+The primary task you have when making a new widget is to override the <code>build()</code> method that gets called when
+the widget is rendered to the screen.
+
+Add a <code>build()</code> override to <code>GHFlutterState</code>:
+
+<pre lang="dart">
+@override
+Widget build(BuildContext context) {
+​    
+}
+</pre>
+
+Fill out <code>build()</code> as follows:
+
+<pre lang="dart">
+@override
+Widget build(BuildContext context) {
+  return Scaffold (
+    appBar: AppBar(
+      title: Text(Strings.appTitle),
+    ),
+    body: Text(Strings.appTitle),
+  );
+}
+</pre>
+
+A <em>Scaffold</em> is a container for material design widgets. It acts as the root of a widget hierarchy. You've added
+an <code>AppBar</code> and a <code>body</code> to the scaffold, and each contains a <code>Text</code> widget.
+
+Update <code>GHFlutterApp</code> so that it uses your new <code>GHFlutter</code> widget as its <code>home</code>
+attribute, instead of building a scaffold of it's own:
+
+<pre lang="dart">
+class GHFlutterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: Strings.appTitle,
+      home: GHFlutter(), //Calling GHFlutter class
+    );
+  }
+}
+</pre>
+
+Build and run the app, and you'll see a new widget in action:
+<br>
+<center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/ghflutterwidget.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/ghflutterwidget-281x500.png"
+    alt="Using GHFlutter Widget" width="281" height="500" class="aligncenter size-large wp-image-188649" /></a>
+  </center>
+  <br>
+Not much has changed yet, but now you're set up to build out the new widget.
+
+<h2>Making Network Calls</h2>
+Earlier you imported your <em>strings.dart</em> file into the project. You can similarly import other packages that are
+part of the Flutter framework and Dart.
+
+For example, you'll now use packages available in the framework to make an HTTP network call and also parse the
+resulting response JSON into Dart objects. Add two new imports at the top of <em>main.dart</em>:
+
+<pre lang="dart">
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+</pre>
+
+You will notice the http package is not available. That is because it is not added to the project yet. Navigate to the
+<em>pubspec.yaml</em> file and right under `dependencies` and `cupertino_icons: ^0.1.2` add the below:
+<pre lang="yaml">
+  cupertino_icons: ^0.1.2
+
+  # HTTP package
+​  http: ^0.12.0+2
+</pre>
+
+<div class="note">
+  <p><em>Note</em>: Notice the indentation. Maintain the indentation of the http package declaration to be the same as
+    that of the cupertino_icons package.</p>
+</div>
+Now, when you save your <em>pubspec.yaml</em> file, the Flutter extension in VS Code will run the
+<code>flutter pub get</code> command. Flutter will get the declared <em>http</em> package and your package will be
+available in <em>main.dart</em> also.
+
+You'll now see an indicator in <em>main.dart</em> on the imports that are currently unused.
+
+Dart apps are single-threaded, but Dart provides support for running code on other threads as well as running
+asynchronous code that does not block the UI thread using an <em>async/await</em> pattern.
+
+You're going to make an asynchronous network call to retrieve a list of GitHub team members. Add an empty list as a
+property at the top of <code>GHFlutterState</code>, and also add a property to hold a text style:
+
+<pre lang="dart">
+var _members = [];
+
+final _biggerFont = const TextStyle(fontSize: 18.0); //Using TextStyle widget to increase font size
+</pre>
+
+The underscores at the beginning of the names make the members of the class <em>private</em>.
+
+To make the asynchronous HTTP call, add a method <code>_loadData()</code> to <code>GHFlutterState</code>:
+
+<pre lang="dart">
+_loadData() async {
+  String dataURL = "https://api.github.com/orgs/raywenderlich/members"; //Initializing the API URL
+  http.Response response = await http.get(dataURL); //Using await to wait till the data is fetched
+  setState(() {
+    _members = json.decode(response.body); //Decoding and assigning data in the json format
+  });
+}
+</pre>
+
+We added the <code>async</code> keyword onto <code>_loadData()</code> to tell Dart that it's asynchronous, and also the
+<code>await</code> keyword on the <code>http.get()</code> call that is blocking. You're using a <code>dataUrl</code>
+value that is set to the GitHub API endpoint that retrieves members for a GitHub organization.
+
+When the HTTP call completes, we pass a callback to <code>setState()</code> that runs synchronously on the UI thread. In
+this case, you are decoding the JSON response and assigning it to the <code>_members</code> list.
+
+Add an <code>initState()</code> override to <code>GHFlutterState</code> that calls <code>_loadData()</code> when the
+state is initialized:
+
+<pre lang="dart">
+@override
+void initState() {
+  super.initState(); //Called once when the stateful widget is inserted in the widget tree.
+
+  _loadData();
+}
+</pre>
+
+<h2>Using a ListView</h2>
+Now that you have a Dart list of members, you need a way to display them in a list in the UI. Dart provides a
+<em>ListView</em> widget that will let you show the data in a list. ListView acts like a <em>RecyclerView</em> on
+Android and a <em>UITableView</em> on iOS, recycling views as the user scrolls through the list to achieve smooth
+scrolling performance.
+
+Add a <code>_buildRow()</code> method to <code>GHFlutterState</code>:
+
+<pre lang="dart">
+Widget _buildRow(int i) {
+  return ListTile(
+    title: Text("${_members[i]["login"]}", style: _biggerFont) //Using index value to fetch data
+  );
+}
+</pre>
+
+You are returning a <em>ListTile</em> widget that shows the "login" value parsed from the JSON for the ith member, and
+also using the text style you created before.
+
+Update the build method of <code>GHFlutterState</code> to have it's body be a <em>ListView.builder</em>:
+
+<pre lang="dart">
+body: ListView.builder( //It takes two recommended arguments i.e. itemCount and itemBuilder
+  padding: const EdgeInsets.all(16.0), //Padding on all edges
+  itemCount: _members.length, //Number of items in the json file
+  itemBuilder: (BuildContext context, int position) {
+    return _buildRow(position);
+  }),
+</pre>
+
+You've added padding, set the <code>itemCount</code> to the number of members, and set the <code>itemBuilder</code>
+using <code>_buildRow()</code> for a given position.
+
+You can try a hot reload, but you may get a "Full restart may be required" message. If so, hit F5 to build and run the
+app:
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/members.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/members-281x500.png" alt="Showing members" width="281"
+    height="500" class="aligncenter size-large wp-image-188650" /></a>
+  </center>
+  <br>
+That's just how easy it is to make a network call, parse the data, and show the results in a list!
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/easy-1.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/easy-1-320x320.png" alt="Wow so easy" width="320"
+    height="320" class="aligncenter size-medium wp-image-188653" /></a>
+  </center>
+  <br>
+<h2>Adding dividers</h2>
+To add dividers into the list, you're going to double the item count, and then return a <em>Divider</em> widget when the
+position in the list is odd. Update the build method of <code>GHFlutterState</code> as below:
+
+<pre lang="dart">
+body: ListView.builder(
+  itemCount: _members.length * 2,
+  itemBuilder: (BuildContext context, int position) {
+    if (position.isOdd) return Divider();
+
+    final index = position ~/ 2;
+    
+    return _buildRow(index);
+  }),
+</pre>
+
+Be sure that you do not to miss the * 2 on <code>itemCount</code>. We've removed the padding from the builder now that we have dividers.
+In <code>itemBuilder</code>, you're either returning a <code>Divider()</code>, or instead calculating a new index by
+integer division and using <code>_buildRow()</code> to build a row item.
+
+Try a hot reload and you should see dividers on the list:
+<br><center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/dividers.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/dividers-281x500.png" alt="With dividers" width="281"
+    height="500" class="aligncenter size-large wp-image-188654" /></a>
+  </center>
+  <br>
+To add padding back into each row, you want to use a <code>Padding</code> widget within _buildRow():
+
+<pre lang="dart">
+Widget _buildRow(int i) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ListTile(
+      title: Text("${_members[i]["login"]}", style: _biggerFont)
+    )
+  );
+}
+</pre>
+
+The <code>ListTile</code> is now a child widget of the padding widget. Hot reload to see the padding on the rows but not
+on the dividers.
+
+<h2>Parsing to custom types</h2>
+In the previous section, the JSON parser took each member in the JSON response and added it to the <code>_members</code>
+list as a Dart <em>Map</em> type, the equivalent of a <em>Map</em> in Kotlin or a <em>Dictionary</em> in Swift.
+
+However, you'll also want to be able to use your custom types.
+
+Add a new <code>Member</code> type to the main.dart file:
+
+<pre lang="dart">
+  class Member {
+    final String login;
+
+    Member(this.login) {
+      if (login == null) {
+        throw ArgumentError("login of Member cannot be null. "
+            "Received: '$login'");
+      }
+    }
+  }
+</pre>
+
+A member has a login property and a constructor that throws an error if the login value is null.
+
+Update the <code>_members</code> declaration in <code>GHFlutterState</code> so that it is a list of <code>Member</code>
+objects:
+
+<pre lang="dart">
+  var _members = <Member>[];
+</pre>
+
+Update <code>_buildRow()</code> to use the <code>login</code> property on the <code>Member</code> object instead of
+using the "login" key on the map:
+
+<pre lang="dart">
+  title: Text("${_members[i].login}", style: _biggerFont)
+</pre>
+
+Now update the callback sent to setState() in <code>_loadData()</code> to turn the decoded map into a
+<code>Member</code> object and add it to the list of members:
+
+<pre lang="dart">
+  setState(() {
+    final membersJSON = json.decode(response.body);
+
+    for (var memberJSON in membersJSON) {
+      final member = Member(memberJSON["login"]);
+      _members.add(member);
+    }
+  });
+</pre>
+
+You'll likely see an error if you try a hot reload, but stop and hit F5 to build and run the app and you should see the
+same screen as before, except now using your new <code>Member</code> class.
+
+<h2>Downloading Images with NetworkImage</h2>
+Each member from GitHub has a URL for their avatar. You'll now add that avatar to the <code>Member</code> class and show
+the avatars in the app.
+
+Update the Member class to add an <code>avatarUrl</code> property that cannot be null:
+
+<pre lang="dart">
+  class Member {
+    final String login;
+    final String avatarUrl;
+  
+    Member(this.login, this.avatarUrl) {
+      if (login == null) {
+        throw new ArgumentError(
+            "login member cannot be null. Received: '$login'");
+      }
+  
+      if (avatarUrl == null) {
+        throw new ArgumentError(
+            "avatarUrl of Member cannot be null.Received: '$avatarUrl'");
+      }
+    }
+  }
+</pre>
+
+Update <code>_buildRow()</code> to show the avatar using a <em>NetworkImage</em> and the <em>CircleAvatar</em> widget:
+
+<pre lang="dart">
+Widget _buildRow(int i) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ListTile(
+      title: Text("${_members[i].login}", style: _biggerFont),
+      leading: CircleAvatar(
+        backgroundColor: Colors.green,
+        backgroundImage: NetworkImage(_members[i].avatarUrl)
+      ),
+    )
+  );
+}
+</pre>
+
+By setting the avatar as the <code>leading</code> attribute of the <code>ListTile</code>, it will show before the title
+within the row. You've also set a background color on the image using the <code>Colors</code> class.
+
+Now update <code>_loadData()</code> to use the "avatar_url" value in the map when creating a new <code>Member</code>:
+
+<pre lang="dart">
+final member = Member(memberJSON["login"], memberJSON["avatar_url"]);
+</pre>
+
+Stop, build, and run the app using F5. You'll see your member avatars now shown in each row:
+<br>
+<center><br>
+<a href="https://koenig-media.raywenderlich.com/uploads/2018/03/avatars.png"target="_blank"><img
+    src="https://koenig-media.raywenderlich.com/uploads/2018/03/avatars-281x500.png" alt="Showing avatars" width="281"
+    height="500" class="aligncenter size-large wp-image-188656" /></a>
+  </center>
+  <br>
+<h2>Cleaning the code</h2>
+Most of your code is now in the <em>main.dart</em> file. To make the code a little cleaner, you can refactor the widget
+and other classes you've added into their files.
+
+Create files named <i>member.dart</i> and <em>ghflutter.dart</em> in the <em>lib</em> folder. Move the
+<code>Member</code> class into <em>member.dart</em> and both the <code>GHFlutterState</code> and <code>GHFlutter</code>
+classes into <em>ghflutter.dart</em>.
+
+You won't need any <code>import</code> statement in <em>member.dart</em>, but the imports in <em>ghflutter.dart</em>
+should be as follows:
+
+<pre lang="dart">
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:flutter/material.dart';
+
+import 'member.dart';
+import 'strings.dart'; 
+</pre>
+
+You also need to update the imports in the <em>main.dart</em>, so that the entire file consists of the following:
+
+<pre lang="dart">
+import 'package:flutter/material.dart';
+
+import 'ghflutter.dart';
+import 'strings.dart';
+
+void main() => runApp(GHFlutterApp());
+
+
+class GHFlutterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: Strings.appTitle,
+      home: GHFlutter(), //Calling GHFlutter class
+    );
+  }
+}  
+</pre>
+
+Build and run the app by hitting F5 and you should see no change, but the code is now a little cleaner. :]
+
+<h2>Adding a Theme</h2>
+You can easily add a theme to the app by adding a <em>theme</em> attribute to the <code>MaterialApp</code> you create in
+<em>main.dart</em>:
+
+<pre lang="dart">
+class GHFlutterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: Strings.appTitle,
+      theme: ThemeData(primaryColor: Colors.green.shade800), //Adding theme color to the app
+      home: GHFlutter(), //Calling GHFlutter class
+    );
+  }
+}  
+</pre>
+
+You're using a shade of green as a Material Design color value for the theme.
+
+Build and run the app by hitting F5 to see the new theme in action.
+
+<h2>Where to Go from here?</h2>
+You should be able to open the final project in either VS Code or Android Studio. Open in VS Code by just opening the
+root folder. You'll need to fetch packages before running the project. Do so by opening the command palette with
+<em>Cmd+Shift+P</em> and running the <em>Flutter: Get Packages</em> command.
+
+To open the final project in Android Studio, choose <em>Open an existing Android Studio project</em> from the
+<em>Welcome to Android Studio</em> screen and navigate to choose the root folder of the final project. You'll need to
+then choose "Open Flutter Settings" (or go to <em>Preferences</em> and search on "Flutter") and set the Flutter SDK path
+to where you cloned the flutter git repo. If needed, then choose "Get dependencies" on the "'Packages get has not been
+run" line in Android Studio. Choose the <em>Project</em> view in the project panel to see your files.
+
+If you're on macOS, you can run the app from Android Studio to either an Android emulator or the iOS Simulator. Try it,
+it's pretty cool! :]
+
+Stay tuned for more Flutter tutorials and screen-casts on our new <a href="https://www.raywenderlich.com/flutter"
+  target="_blank">Flutter page</a>!
